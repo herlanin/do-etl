@@ -1,3 +1,3 @@
 # Diesel oil ETL
 
-This project objective is to extract diesel oil caches and its products, so that the sum of aggregated data obtained matches the aggregated sum of the pivot table. 
+This project objective is to extract some caches from pivots tables in a xls file, transform and store this data into a partitioned table.
