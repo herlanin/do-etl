@@ -8,10 +8,11 @@ from assets.do_etl.scripts import xls_to_xlsx, xlsx_extract_sheets_to_csv, diese
 
 # DAG
 DAG_NAME_ID = 'do_etl'
-DAG_DESCRIPTION = 'This dag extracts caches from a pivot table in a xls file then stores them in a partitioned structure.'
+DAG_DESCRIPTION = 'This dag extracts caches from a pivot table in a xls file then stores them in a partitioned ' \
+                  'structure. '
 OWNER_NAME = 'hugo'
-SCHEDULE = 'once'
-START_TIME = datetime.today()
+SCHEDULE = '0 5 * * *'
+START_TIME = datetime(2019, 7, 1)
 default_args = {
     'depends_on_past': False,
     'owner': OWNER_NAME,
@@ -28,8 +29,8 @@ dag = DAG(
     schedule_interval=SCHEDULE,
     default_args=default_args
 )
-xls_file_path = './../data/Vendas_de_Combustiveis_m3.xls'
-xlsx_folder_path = './../data/processed/{{execution_date.strftime("%Y_%m_%d_%H_%M_%S")}}/'
+xls_file_path = '/usr/local/airflow/data/Vendas_de_Combustiveis_m3.xls'
+xlsx_folder_path = '/usr/local/airflow/data/processed/{{execution_date.strftime("%Y_%m_%d_%H_%M_%S")}}/'
 xls_to_xlsx_task = PythonOperator(
     task_id='xls_to_xlsx',
     python_callable=xls_to_xlsx,
@@ -39,10 +40,10 @@ xls_to_xlsx_task = PythonOperator(
     dag=dag,
 )
 
-xlsx_file_path = './../data/processed/{{execution_date.strftime(' \
-                 '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3.xls '
-sheets_folder_path = './../data/processed/{{execution_date.strftime(' \
-                     '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3_sheets/ '
+xlsx_file_path = '/usr/local/airflow/data/processed/{{execution_date.strftime(' \
+                 '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3.xlsx'
+sheets_folder_path = '/usr/local/airflow/data/processed/{{execution_date.strftime(' \
+                     '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3_sheets/'
 xlsx_extract_sheets_to_csv_task = PythonOperator(
     task_id='xlsx_extract_sheets_to_csv',
     python_callable=xlsx_extract_sheets_to_csv,
@@ -53,10 +54,10 @@ xlsx_extract_sheets_to_csv_task = PythonOperator(
     dag=dag,
 )
 
-diesel_data_file_path = './../data/processed/{{execution_date.strftime(' \
-                        '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3_sheets/DPCache_m3.csv '
-partitioned_data_folder_path = './../data/processed/{{execution_date.strftime(' \
-                               '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3_partitioned/ '
+diesel_data_file_path = '/usr/local/airflow/data/processed/{{execution_date.strftime(' \
+                        '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3_sheets/DPCache_m3.csv'
+partitioned_data_folder_path = '/usr/local/airflow/data/processed/{{execution_date.strftime(' \
+                               '"%Y_%m_%d_%H_%M_%S")}}/Vendas_de_Combustiveis_m3_partitioned/'
 diesel_oil_table_transform_partition_task = PythonOperator(
     task_id='diesel_oil_table_transform_partition',
     python_callable=diesel_oil_table_transform_partition,
@@ -68,3 +69,5 @@ diesel_oil_table_transform_partition_task = PythonOperator(
     trigger_rule='all_success',
     dag=dag,
 )
+
+xls_to_xlsx_task >> xlsx_extract_sheets_to_csv_task >> diesel_oil_table_transform_partition_task

@@ -14,6 +14,8 @@ This will start an airflow webserver using LocalExecutor with matadata stored in
     docker-compose up --build -d
     
 Access **127.0.0.1:8080** to see the airflow webserver.
+
+![print](print2.png)
  
 ## The do_etl DAG
 

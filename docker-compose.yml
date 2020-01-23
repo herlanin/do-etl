@@ -27,6 +27,7 @@ services:
         volumes:
             - ./dags:/usr/local/airflow/dags
             - ./assets:/usr/local/airflow/assets
+            - ./data:/usr/local/airflow/data
         ports:
             - "8080:8080"
         command: webserver
