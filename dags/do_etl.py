@@ -4,11 +4,11 @@ sys.path.append('/usr/local/airflow/')
 from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.python_operator import PythonOperator
-from assets.do-etl import xls_to_xlsx, xlsx_extract_sheets_to_csv, diesel_oil_table_transform_partition
+from assets.do_etl.scripts import xls_to_xlsx, xlsx_extract_sheets_to_csv, diesel_oil_table_transform_partition
 
 # DAG
 DAG_NAME_ID = 'do_etl'
-DAG_DESCRIPTION = 'This dag extracts caches from a pivot table in a xls file then inserts the data into a table'
+DAG_DESCRIPTION = 'This dag extracts caches from a pivot table in a xls file then stores them in a partitioned structure.'
 OWNER_NAME = 'hugo'
 SCHEDULE = 'once'
 START_TIME = datetime.today()

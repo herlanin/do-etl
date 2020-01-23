@@ -1,11 +1,12 @@
 # coding=utf-8
 
-import subprocess
-import pandas as pd
-import os
-import pyarrow.parquet as pq
-import pyarrow as pa
 import datetime as dt
+import os
+import subprocess
+
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 
 def xls_to_xlsx(input, output, **context):
