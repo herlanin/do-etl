@@ -60,7 +60,7 @@ Then load the partitions with:
     
 Then with a  
 
-    SELECT * FROM "events_manager"."vendas_de_combustiveis_m3" limit 10; 
+    SELECT * FROM vendas_de_combustiveis_m3 limit 10; 
 
 you will have something like this:
 
